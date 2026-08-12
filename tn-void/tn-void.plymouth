@@ -1,0 +1,46 @@
+[Plymouth Theme]
+Name=TN Void
+Description=Tokyo Night underground — electric gear spinner (two-step engine)
+ModuleName=two-step
+
+[two-step]
+ImageDir=/usr/share/plymouth/themes/tn-void
+Font=DejaVu Sans 12
+TitleFont=DejaVu Sans Bold 18
+MonospaceFont=DejaVu Sans Mono 12
+DialogHorizontalAlignment=.5
+DialogVerticalAlignment=.45
+TitleHorizontalAlignment=.5
+TitleVerticalAlignment=.38
+HorizontalAlignment=.5
+VerticalAlignment=.65
+WatermarkHorizontalAlignment=.5
+WatermarkVerticalAlignment=.96
+Transition=none
+TransitionDuration=0.0
+BackgroundStartColor=0x0f111a
+BackgroundEndColor=0x05060a
+ProgressBarBackgroundColor=0x16161e
+ProgressBarForegroundColor=0x7dcfff
+MessageBelowAnimation=true
+
+[boot-up]
+UseEndAnimation=false
+
+[shutdown]
+UseEndAnimation=false
+
+[reboot]
+UseEndAnimation=false
+
+[updates]
+UseProgressBar=true
+ProgressBarShowPercentComplete=true
+Title=Installing Updates...
+SubTitle=Do not turn off your computer
+
+[system-upgrade]
+UseProgressBar=true
+ProgressBarShowPercentComplete=true
+Title=Upgrading System...
+SubTitle=Do not turn off your computer
