@@ -1,0 +1,47 @@
+#!/usr/bin/ash
+# Drop into /etc/initcpio/hooks/plymouth (overrides package copy).
+# Picks a random theme from /etc/plymouth/theme-pool each boot.
+
+pick_theme() {
+  if [ ! -f /etc/plymouth/theme-pool ]; then
+    return 0
+  fi
+
+  # Collect non-empty lines
+  set --
+  while read -r line || [ -n "$line" ]; do
+    line=${line%%#*}
+    # trim spaces
+    line=$(echo "$line" | tr -d ' \t\r')
+    [ -z "$line" ] && continue
+    [ -d "/usr/share/plymouth/themes/$line" ] || continue
+    set -- "$@" "$line"
+  done < /etc/plymouth/theme-pool
+
+  [ "$#" -eq 0 ] && return 0
+
+  # BusyBox ash provides $RANDOM
+  idx=$((RANDOM % $# + 1))
+  eval "theme=\${$idx}"
+
+  mkdir -p /etc/plymouth
+  printf '%s\n' '[Daemon]' "Theme=$theme" > /etc/plymouth/plymouthd.conf
+}
+
+run_hook() {
+  mkdir -m755 -p /dev/pts
+  mount -t devpts devpts /dev/pts -o nosuid,noexec,gid=5,mode=620
+
+  pick_theme
+
+  plymouthd --mode=boot --pid-file=/run/plymouth/pid --attach-to-session
+  plymouth show-splash
+}
+
+run_latehook() {
+  plymouth update-root-fs --new-root-dir=/new_root
+}
+
+run_emergencyhook() {
+  plymouth --wait quit
+}
